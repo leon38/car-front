@@ -8,8 +8,7 @@
 
 html,
 body {
-  @apply bg-white;
-  @apply font-sans md:font-serif;
+  @apply bg-gray-300;
 }
 
 /* Start purging... */

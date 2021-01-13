@@ -7,6 +7,9 @@ module.exports = {
         'accent-1': '#333',
       },
     },
+    fontFamily: {
+      'body': ['Inter var', 'Open Sans', 'Helvetica'],
+    }
   },
   variants: {
     extend: {},
