@@ -1,16 +1,16 @@
 import Head from 'next/head'
 import Car from '../components/car.js'
 import styles from '../styles/Home.module.css'
-import getCar from './api/car.js'
+import { getCars, getReparations } from '../webservice/car.js'
 
 export default function Home({cars}) {
   return (
-    <div className="container py-8 mx-auto">
-      <h1>Carnets de bord</h1>
-      <div className="grid grid-cols-2 gap-x-36">
+    <div className="container py-8 mx-auto font-rubik">
+      <h1 className="font-rubik">Carnets de bord</h1>
+      <div className="grid grid-cols-2 gap-x-24">
         {
           cars.map(car => {
-            return (<Car car={ car } />)
+            return (<Car car={ car } key={car.id} />)
           })
         }
       </div>
@@ -19,22 +19,11 @@ export default function Home({cars}) {
 }
 
 export async function getServerSideProps(ctx) {
-  const res = await fetch('http://localhost:5000/cars')
-  .then(function (res) {
-      return res.json();
-  })
-  .then(function (response) {
-      return response;
-  })
-  .catch(function (err) {
-      console.log(err);
-  });
-
-  console.log(res.cars);
+  const cars = await getCars()
 
   return {
     props: {
-     cars: res.cars
+     cars: cars,
     }
   }
 }

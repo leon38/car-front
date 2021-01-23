@@ -5,10 +5,11 @@ module.exports = {
     extend: {
       colors: {
         'accent-1': '#333',
+        'blue': '#34558b',
       },
     },
     fontFamily: {
-      'body': ['Inter var', 'Open Sans', 'Helvetica'],
+      'body': ['Rubik', 'Inter var', 'Open Sans', 'Helvetica'],
     }
   },
   variants: {
