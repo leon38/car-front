@@ -32,3 +32,21 @@ export async function addReparation({reparation}) {
 
     return res;
 }
+
+export async function deleteReparation(reparation_id) {
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
+    const res = await fetch('http://localhost:5000/reparations/'+reparation_id, {
+            method: 'DELETE',
+            headers: headers
+        })
+        .then(function (res) {
+           console.log(res)
+        })
+        .catch(function (err) {
+            console.log(err)
+        })
+
+    return res;
+}

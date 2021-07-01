@@ -1,10 +1,21 @@
 import React from "react";
-import { addReparation } from "../webservice/car";
+import { addReparation, deleteReparation } from "../webservice/car";
 
 export default function Reparations({reparations, car_id}) {
+    const defaultReparations = reparations;
+
     const [showModal, setShowModal] = React.useState(false);
     const [showForm, setShowForm] = React.useState(false);
     const [reparation, setReparation] = React.useState((new Map()).set("car_id", car_id));
+    const [list, updateList] = React.useState(defaultReparations);
+
+
+    const handleRemoveReparation = (reparation) => {
+      console.log(reparation)
+      deleteReparation(reparation.id);
+      id = reparation.id;
+      updateList(list.filter(reparation => reparation.id !== id));
+    };
     
     return (
       <>
@@ -46,7 +57,7 @@ export default function Reparations({reparations, car_id}) {
                         <div>Coût</div>
                         <div>Date</div>
                         <div>&nbsp;</div>
-                    {reparations.map(reparation => {
+                    {defaultReparations.map((reparation) => {
                         let date = new Date(parseInt(reparation.date) * 1000).toLocaleDateString('fr-FR');
                         return (
                             <>
@@ -55,7 +66,7 @@ export default function Reparations({reparations, car_id}) {
                                 <div>{reparation.adresse_garage}</div>
                                 <div>{reparation.cout} €</div>
                                 <div>{date}</div>
-                                <div>&nbsp;</div>
+                                <div><button onClick={() => {handleRemoveReparation(reparation)}}>x</button></div>
                             </>
                         )
                     })}

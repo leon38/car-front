@@ -38,7 +38,7 @@ class Car extends React.Component {
                   let date = new Date(parseInt(reparation.date) * 1000);
                   date.setFullYear(date.getFullYear() + 1);
                   const nextKilometrage = reparation.kilometrage + 10000;
-                  return (<span className="block float-right">le {date.toLocaleDateString('fr-FR')} ou à {nextKilometrage} km</span>)
+                  return (<span className="block float-right" key={reparation.id}>le {date.toLocaleDateString('fr-FR')} ou à {nextKilometrage} km</span>)
                 }
               })}
               <div className="clear-both"></div>
