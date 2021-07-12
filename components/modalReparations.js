@@ -1,5 +1,5 @@
 import React from "react";
-import { addReparation, deleteReparation } from "../webservice/car";
+import { RepairmentService } from "../webservice/RepairmentService";
 
 export default function Reparations({reparations, car_id}) {
     const defaultReparations = reparations;
@@ -11,11 +11,18 @@ export default function Reparations({reparations, car_id}) {
 
 
     const handleRemoveReparation = (reparation) => {
-      console.log(reparation)
-      deleteReparation(reparation.id);
+      (new RepairmentService).delete(reparation.id)
       id = reparation.id;
       updateList(list.filter(reparation => reparation.id !== id));
     };
+
+    const handleAddRepairment = (reparation) => {
+      let pattern = /(\d{4})\-(\d{2})\-(\d{2})/;
+      reparation.date = reparation.date.replace(pattern, '$3/$2/$1');
+      (new RepairmentService).create(reparation)
+      updateList(list.push(reparation))
+      setShowForm(false);
+    }
     
     return (
       <>
@@ -58,28 +65,37 @@ export default function Reparations({reparations, car_id}) {
                         <div>Date</div>
                         <div>&nbsp;</div>
                     {defaultReparations.map((reparation) => {
-                        let date = new Date(parseInt(reparation.date) * 1000).toLocaleDateString('fr-FR');
                         return (
                             <>
                                 <div className="col-span-3">{reparation.description}</div>
-                                <div>{reparation.kilometrage}</div>
-                                <div>{reparation.adresse_garage}</div>
-                                <div>{reparation.cout} €</div>
-                                <div>{date}</div>
-                                <div><button onClick={() => {handleRemoveReparation(reparation)}}>x</button></div>
+                                <div>{reparation.kilometers}</div>
+                                <div>{reparation.garage_address}</div>
+                                <div>{reparation.price} €</div>
+                                <div>{reparation.date}</div>
+                                <div>
+                                  <button onClick={() => {handleRemoveReparation(reparation)}} className="float-right">
+                                    <svg class="h-5 w-5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
+                                  </button>
+                                </div>
                             </>
                         )
                     })}
                     {showForm ? (
                       <>
                         <div className="col-span-2"><textarea placeholder="Description" name="description" onChange={(e) => setReparation(reparation.set("description", e.target.value))}></textarea></div>
-                        <div><input type="text" name="type" placeholder="Type" onChange={(e) => setReparation(reparation.set("type", e.target.value))} /></div>
-                        <div><input type="number" name="kilometrage" placeholder="Kilométrage" onChange={(e) => setReparation(reparation.set("kilometrage", e.target.value))} /></div>
-                        <div><input type="text" name="adresse_garage" placeholder="Garage" onChange={(e) => setReparation(reparation.set("adresse_garage", e.target.value))}/></div>
-                        <div><input type="number" name="cout" placeholder="Coût" onChange={(e) => {setReparation(reparation.set("cout", e.target.value))}} /></div>
-                        <div><input type="date" name="date" onChange={(e) => setReparation(reparation.set("date", e.target.value))}/></div>
+                        <div>
+                          <select name="type" onChange={(e) => setReparation(reparation.set("type", e.target.value))}>
+                            <option value="">Type</option>
+                            <option value="reparation">Réparation</option>
+                            <option value="vidange">Vidange</option>
+                          </select>
+                        </div>
+                        <div><input type="number" name="kilometers" placeholder="Kilométrage" onChange={(e) => setReparation(reparation.set("kilometers", e.target.value))} /></div>
+                        <div><input type="text" name="adresse_garage" placeholder="Garage" onChange={(e) => setReparation(reparation.set("garage_address", e.target.value))}/></div>
+                        <div><input type="number" name="price" placeholder="Coût" onChange={(e) => {setReparation(reparation.set("price", e.target.value))}} /></div>
+                        <div><input type="date" data-date-format="DD/MMMM/YYYY" name="date" onChange={(e) => setReparation(reparation.set("date", e.target.value))}/></div>
                         <input type="hidden" name="car_id" value="{reparations[0].car_id}" />
-                        <div><input type="submit" value="Valider" onClick={() => { addReparation({reparation}); const dateReparation = reparation.get("date").split("/"); reparation.set("date", new Date(dateReparation[2]+"-"+dateReparation[1]+"-"+dateReparation[0]).getTime() / 1000); reparations.push(Object.fromEntries(reparation)); setShowForm(false); }}/></div>
+                        <div><input type="submit" value="Valider" onClick={() => { handleAddRepairment(Object.fromEntries(reparation)); }}/></div>
                     </>
                     ) : null}
                   </div>

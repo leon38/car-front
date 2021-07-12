@@ -1,7 +1,5 @@
-import Head from 'next/head'
 import Car from '../components/car.js'
-import styles from '../styles/Home.module.css'
-import { getCars, getReparations } from '../webservice/car.js'
+import { CarService } from '../webservice/CarService.js'
 
 export default function Home({cars}) {
   return (
@@ -19,7 +17,7 @@ export default function Home({cars}) {
 }
 
 export async function getServerSideProps(ctx) {
-  const cars = await getCars()
+  const cars = await (new CarService).getAll()
 
   return {
     props: {
