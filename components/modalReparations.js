@@ -1,11 +1,15 @@
 import React from "react";
 import { RepairmentService } from "../webservice/RepairmentService";
+import Repairment from "./repairment";
+import RepairmentForm from "./repairmentForm";
 
 export default function Reparations({reparations, car_id}) {
     const defaultReparations = reparations;
 
     const [showModal, setShowModal] = React.useState(false);
     const [showForm, setShowForm] = React.useState(false);
+    const [showFormInplace, setShowFormInPlace] = React.useState(false);
+    const [indexForm, setIndexForm] = React.useState(0);
     const [reparation, setReparation] = React.useState((new Map()).set("car_id", car_id));
     const [list, updateList] = React.useState(defaultReparations);
 
@@ -57,27 +61,10 @@ export default function Reparations({reparations, car_id}) {
                     </button>
                   </div>
                   {/*body*/}
-                  <div className="relative p-6 grid grid-cols-8 gap-4 border border-t-0 border-l-0 border-r-0 border-b-1 border-dotted border-gray-300 p-2 hover:bg-gray-50">
-                        <div className="col-span-3">Description</div>
-                        <div>Kilométrage</div>
-                        <div>Garage</div>
-                        <div>Coût</div>
-                        <div>Date</div>
-                        <div>&nbsp;</div>
-                    {defaultReparations.map((reparation) => {
+                  <div className="relative p-6 grid grid-cols-8 gap-4 border border-t-0 border-l-0 border-r-0 border-b-1 border-gray-300 p-2 hover:bg-gray-50">
+                    {defaultReparations.map((reparation, index) => {
                         return (
-                            <>
-                                <div className="col-span-3">{reparation.description}</div>
-                                <div>{reparation.kilometers}</div>
-                                <div>{reparation.garage_address}</div>
-                                <div>{reparation.price} €</div>
-                                <div>{reparation.date}</div>
-                                <div>
-                                  <button onClick={() => {handleRemoveReparation(reparation)}} className="float-right">
-                                    <svg class="h-5 w-5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
-                                  </button>
-                                </div>
-                            </>
+                          <>{(showFormInplace && index === indexForm) ? <RepairmentForm repairment={ reparation } setShowFormInPlace={setShowFormInPlace}></RepairmentForm> : <Repairment reparation={ reparation } setShowFormInPlace={setShowFormInPlace} setIndexForm={setIndexForm} indexForm={index}></Repairment>}</>
                         )
                     })}
                     {showForm ? (
@@ -99,7 +86,7 @@ export default function Reparations({reparations, car_id}) {
                     </>
                     ) : null}
                   </div>
-                  <div className="float-right">
+                  <div className="float-right p-2 bg-gray-100 rounded-xl rounded-b">
                     <button className="float-right bg-indigo-400 text-white active:bg-indigo-600 font-bold uppercase text-sm px-6 py-3 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 rounded-xl"
                       type="button"
                       style={{ transition: "all .15s ease" }}
