@@ -27,6 +27,13 @@ export default function Reparations({reparations, car_id}) {
       updateList(list.push(reparation))
       setShowForm(false);
     }
+
+    const handleUpdateRepairment = (reparation) => {
+      let pattern = /(\d{4})\-(\d{2})\-(\d{2})/;
+      reparation.date = reparation.date.replace(pattern, '$3/$2/$1');
+      (new RepairmentService).update(reparation.id, reparation)
+      setShowFormInPlace(false);
+    }
     
     return (
       <>
@@ -64,7 +71,7 @@ export default function Reparations({reparations, car_id}) {
                   <div className="relative p-6 grid grid-cols-8 gap-4 border border-t-0 border-l-0 border-r-0 border-b-1 border-gray-300 p-2 hover:bg-gray-50">
                     {defaultReparations.map((reparation, index) => {
                         return (
-                          <>{(showFormInplace && index === indexForm) ? <RepairmentForm repairment={ reparation } setShowFormInPlace={setShowFormInPlace}></RepairmentForm> : <Repairment reparation={ reparation } setShowFormInPlace={setShowFormInPlace} setIndexForm={setIndexForm} indexForm={index}></Repairment>}</>
+                          <>{(showFormInplace && index === indexForm) ? <RepairmentForm repairment={ reparation } setReparation={setReparation} handleUpdateRepairment={handleUpdateRepairment}></RepairmentForm> : <Repairment reparation={ reparation } setShowFormInPlace={setShowFormInPlace} setIndexForm={setIndexForm} indexForm={index}></Repairment>}</>
                         )
                     })}
                     {showForm ? (

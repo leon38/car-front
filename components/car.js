@@ -29,6 +29,11 @@ class Car extends React.Component {
               <div className="clear-both"></div>
             </div>
             <div className="border border-t-0 border-l-0 border-r-0 border-t-0 border-b-1 border-dotted border-gray-300 p-2 hover:bg-gray-50">
+              <span className="block float-left text-gray-400">Taille des pneus</span>
+              <span className="block float-right">{this.props.car.tire_dimensions}</span>
+              <div className="clear-both"></div>
+            </div>
+            <div className="border border-t-0 border-l-0 border-r-0 border-t-0 border-b-1 border-dotted border-gray-300 p-2 hover:bg-gray-50">
               <span className="block float-left text-gray-400">Contrôle technique</span>
               <span className="block float-right">{technical_inspection.toLocaleDateString('fr-FR')}</span>
               <div className="clear-both"></div>
